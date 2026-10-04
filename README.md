@@ -1,6 +1,6 @@
-# Suplaihub Backend API
+# Suplaihub
 
-Suplaihub is a backend API for a simplified B2B supplier catalog application designed specifically for campus projects. The application facilitates procurement needs such as raw materials, packaging, logistics, and machinery. This backend provides role-based authentication endpoints, product catalog management for suppliers, catalog search and discovery for clients, as well as shopping cart and checkout simulations.
+Suplaihub is a B2B supplier catalog application designed specifically for campus projects. The application facilitates procurement needs such as raw materials, packaging, logistics, and machinery. This backend provides role-based authentication endpoints, product catalog management for suppliers, catalog search and discovery for clients, as well as shopping cart and checkout simulations.
 
 ![Node.js](https://img.shields.io/badge/Node.js-v18%2B-339933?style=flat-square&logo=nodedotjs&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-v5.0-3178C6?style=flat-square&logo=typescript&logoColor=white)

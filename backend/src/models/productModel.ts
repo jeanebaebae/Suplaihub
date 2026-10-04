@@ -16,10 +16,17 @@ export interface ProductEntity {
 export const findSupplierById = async (userId: string) => {
     const { data, error } = await supabase
         .from('categories')
-        .select('*');
+        .select('*')
+        .single()
     
     if(error) throw new Error(error.message);
     return data;
+};
+
+export const getAllCategories = async () => {
+  const { data, error } = await supabase.from('categories').select('*');
+  if (error) throw new Error(error.message);
+  return data;
 };
 
 export const createProduct = async (productData: {
@@ -38,6 +45,17 @@ export const createProduct = async (productData: {
         .order('created_at', { ascending: false });
     
     if(error) throw new Error(error.message);
+    return data as ProductEntity[];
+};
+
+export const getProductBySupplier = async (supplierId: string): Promise <ProductEntity[]> => {
+    const { data, error } = await supabase
+        .from('products')
+        .select('*, categories(name)')
+        .eq('supplier_id', supplierId)
+        .order('created at', { ascending: false })
+
+    if (error) throw new Error(error.message);
     return data as ProductEntity[];
 };
 

@@ -1,7 +1,7 @@
 import { type Request, type Response } from "express";
 import { supabase } from '../config/db.js';
 import { hashPassword, comparePassword, generateToken, UserRole } from "../utils/auth.js";
-import { createUser, findUserByEmail } from "../models/userModel.js";
+import { createSupplier, createUser, findUserByEmail } from "../models/userModel.js";
 import { User } from "@supabase/supabase-js";
 
 export const register = async (req: Request, res: Response) => {
@@ -28,7 +28,19 @@ export const register = async (req: Request, res: Response) => {
             full_name,
             role: role as UserRole,
         });
-    } catch {
 
+        if(role === 'supplier') {
+            await createSupplier({
+                user_id: newUser.id,
+                company_name: company_name || full_name,
+                description,
+            });  
+        }
+
+        const token = generateToken({ userId: newUser.id, role: newUser.role });
+
+        return res.status(201).json({message: 'Registrasi berhasil', user: newUser, token});
+    } catch (error: any) {
+        return res.status(500).json({message: 'Terjadi kesalahan pada server', error: error.message});
     }
 }
