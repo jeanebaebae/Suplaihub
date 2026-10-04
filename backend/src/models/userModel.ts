@@ -45,7 +45,7 @@ export const createUser = async (userData: {
           role: userData.role  
         })
         .select('id, email, full_name, role')
-        .select();
+        .single();
     
     if(error || !data) {
         throw new Error(error?.message || 'Gagal membuat akun')
@@ -53,3 +53,24 @@ export const createUser = async (userData: {
 
     return data as UserEntity;
 }
+
+export const createSupplier = async (supplierData: {
+    user_id: string;
+    company_name: string;
+    description?: string | null;
+}): Promise<SupplierEntity> => {
+    const { data, error } = await supabase
+        .from('suppliers')
+        .insert({
+            user_id: supplierData.user_id,
+            company_name: supplierData.company_name,
+            description: supplierData.description || null,
+        })
+        .select('*')
+        .single();
+
+    if(error || !data) {    
+        throw new Error(error?.message || 'Gagal membuat profil supplier');
+    }
+    return data as SupplierEntity;
+};
