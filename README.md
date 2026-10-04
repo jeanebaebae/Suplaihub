@@ -1,6 +1,12 @@
 # Suplaihub Backend API
 
-Suplaihub adalah API backend untuk aplikasi katalog supplier B2B sederhana yang dirancang khusus untuk proyek kampus. Aplikasi ini memfasilitasi pencarian dan pengadaan kebutuhan proyek seperti bahan baku, kemasan, logistik, dan mesin. Backend ini menyediakan endpoint otentikasi berbasis peran (*role-based*), manajemen katalog produk untuk supplier, pencarian katalog untuk client, serta simulasi keranjang belanja dan checkout.
+Suplaihub is a backend API for a simplified B2B supplier catalog application designed specifically for campus projects. The application facilitates procurement needs such as raw materials, packaging, logistics, and machinery. This backend provides role-based authentication endpoints, product catalog management for suppliers, catalog search and discovery for clients, as well as shopping cart and checkout simulations.
+
+![Node.js](https://img.shields.io/badge/Node.js-v18%2B-339933?style=flat-square&logo=nodedotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-v5.0-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-Backend-000000?style=flat-square&logo=express&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![Auth](https://img.shields.io/badge/Auth-JWT%20HS256-000000?style=flat-square&logo=jsonwebtokens&logoColor=white)
 
 ---
 
@@ -19,12 +25,12 @@ Suplaihub adalah API backend untuk aplikasi katalog supplier B2B sederhana yang 
 
 ## Architecture
 
-Proyek ini menerapkan **Layered Architecture (MVC)** yang terisolasi dengan jelas. Setiap lapisan memiliki tanggung jawab tunggal (*single responsibility*) dan berkomunikasi secara bertahap dengan lapisan di sekitarnya.
+This project strictly adheres to a **Layered Architecture (MVC)** pattern. Each layer has a single responsibility and communicates only with its direct neighbor.
 
 ```text
-config/       → memuat environment variable (.env) dan inisialisasi koneksi database Supabase
-middlewares/  → verifikasi token JWT dan penanganan otorisasi berbasis peran (role-based access)
-controllers/  → menangani request/response HTTP, validasi input dasar, dan pengiriman response
-models/       → mendefinisikan entitas data/interface dan menangani query langsung ke database Supabase
-utils/        → helper fungsi umum seperti hashing password, generasi & verifikasi JWT
-routes/       → pendaftaran endpoint API dan pemetaan ke controller serta middleware yang sesuai
+config/       → Environment loading (.env) and Supabase database connection initialization
+middlewares/  → JWT verification and role-based access enforcement
+controllers/  → HTTP request/response handling, input validation, and response formatting
+models/       → Data interface definitions and direct database queries via Supabase
+utils/        → Shared helper functions (password hashing, JWT generation & verification)
+routes/       → Centralized route declarations and middleware attachment
