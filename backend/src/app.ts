@@ -1,20 +1,14 @@
-import express, { type Request, type Response } from 'express';
+import express, { Application, type Request, type Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import productRoutes from ''
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+import authRoutes from './routes/authRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import productRoutes from './routes/productRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
 
-app.use(cors());
-app.use(express.json());
+dotenv.config();
 
-app.get('/', (req: Request, res: Response) => {
-    res.status(200).json({message: 'Berhasil'});
-});
-
-app.listen('port', () => {
-    console.log(`Server berjalan di ${PORT}`);
-});
+const app: Application = express();
 
 export default app;

@@ -28,7 +28,18 @@ export const findUserByEmail = async (email: string): Promise<UserEntity | null>
 
     if (error || !data) return null;
     return data as UserEntity;
-}
+};
+
+export const findUserById = async (userId: string): Promise<Omit<UserEntity, 'password_hash'> | null> => {
+    const { data, error } = await supabase
+        .from('users')
+        .select('id, email, full_name, phone, role, created_at')
+        .eq('id', userId)
+        .single();
+
+    if (error || !data) return null;
+    return data;
+};
 
 export const createUser = async (userData: {
     email: string;
@@ -52,7 +63,7 @@ export const createUser = async (userData: {
     }
 
     return data as UserEntity;
-}
+};
 
 export const createSupplier = async (supplierData: {
     user_id: string;
@@ -73,4 +84,34 @@ export const createSupplier = async (supplierData: {
         throw new Error(error?.message || 'Gagal membuat profil supplier');
     }
     return data as SupplierEntity;
+};
+
+export const updateUserProfile = async (
+    userId: string,
+    updateData: { full_name?: string }
+) => {
+    const { data, error } = await supabase
+        .from('users')
+        .update(updateData)
+        .eq('id', userId)
+        .select('id, email, full_name, role')
+        .single();
+
+    if(error) throw new Error(error.message);
+    return data;
+};
+
+export const updateSupplierProfile = async (
+    userId: string,
+    updateData: { company_name?: string, description?: string }
+) => {
+    const { data, error } = await supabase
+        .from('suppliers')
+        .update(updateData)
+        .eq('user_id', userId)
+        .select('*')
+        .single();
+
+    if(error) throw new Error(error.message);
+    return data;
 };
