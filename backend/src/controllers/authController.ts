@@ -9,10 +9,16 @@ export const register = async (req: Request, res: Response) => {
         const { email, password, full_name, role, company_name, description } = req.body;
 
         if(!email || !password || !full_name || !role) {
-            return res.status(400).json({message: 'Email, password, dan nama lengkap wajib diisi'});
+            return res.status(400).json({
+                status: 'error',
+                message: 'Email, password, dan nama lengkap wajib diisi'
+            });
         }
         if(role !== 'client' || role !== 'supplier') {
-            return res.status(400).json({message: 'Role tidak cocok'});
+            return res.status(400).json({
+                status: 'error',
+                message: 'Role tidak cocok'
+            });
         }
         
         const existingUser = await findUserByEmail(email);
@@ -29,18 +35,88 @@ export const register = async (req: Request, res: Response) => {
             role: role as UserRole,
         });
 
+        let supplierProfile = null;
         if(role === 'supplier') {
-            await createSupplier({
+            supplierProfile = await createSupplier({
                 user_id: newUser.id,
                 company_name: company_name || full_name,
                 description,
             });  
         }
 
-        const token = generateToken({ userId: newUser.id, role: newUser.role });
+        const token = generateToken({ 
+            userId: newUser.id, 
+            role: newUser.role
+         });
 
-        return res.status(201).json({message: 'Registrasi berhasil', user: newUser, token});
+        return res.status(201).json({
+            status: 'success',
+            message: 'Registrasi berhasil',
+            data: {
+                user: newUser,
+                supplier: supplierProfile,
+                token,
+            },
+        });
     } catch (error: any) {
-        return res.status(500).json({message: 'Terjadi kesalahan pada server', error: error.message});
+        return res.status(500).json({
+            status: 'error',
+            message: 'Terjadi kesalahan pada server',
+            error: error.message
+        });
     }
-}
+};
+
+export const login = async (req: Request, res: Response) => {
+    try {
+        const { email, password } = req.body;
+
+        if(!email || !password) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Email dan password wajib diisi'
+            });
+        }
+
+        const user = await findUserByEmail(email);
+        if(!user) {
+            return res.status(401).json({
+                status: 'error',
+                message: 'Email dan password wajib diisi'
+            });
+        }
+
+        const isPasswordValid = await comparePassword(password, user.password_hash);
+        if(!isPasswordValid) {
+            return res.status(401).json({
+                status: 'error',
+                message: 'Email atau password salah'
+            });
+        }
+
+        const token = generateToken({
+            userId: user.id,
+            role: user.role
+        });
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Login berhasil',
+            data: {
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    full_name: user.full_name,
+                    role: user.role,
+                },
+                token,
+            },
+        });
+    } catch (error: any) {
+        return res.status(500).json({
+            status: 'error',
+            message: 'Gagal melakukan login',
+            error: error.message
+        })
+    }
+};

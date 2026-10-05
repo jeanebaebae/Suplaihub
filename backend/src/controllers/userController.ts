@@ -6,7 +6,7 @@ export const getProfile = async (req: AuthenticatedRequest, res: Response) => {
     try {
         const userId = req.user?.userId;
         if(!userId) {
-            return res.status(401).json({ message: 'User tidak teridentifikasi '});
+            return res.status(401).json({ message: 'User tidak teridentifikasi'});
         }
 
         const user = await findUserById(userId);
