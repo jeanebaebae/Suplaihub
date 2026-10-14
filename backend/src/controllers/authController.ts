@@ -3,6 +3,7 @@ import { supabase } from '../config/db.js';
 import { hashPassword, comparePassword, generateToken, UserRole } from "../utils/auth.js";
 import { createSupplier, createUser, findUserByEmail } from "../models/userModel.js";
 import { User } from "@supabase/supabase-js";
+import { logger } from "../utils/logger.js";
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -14,7 +15,12 @@ export const register = async (req: Request, res: Response) => {
                 message: 'Email, password, dan nama lengkap wajib diisi'
             });
         }
-        if(role !== 'client' || role !== 'supplier') {
+        if(role !== 'client' && role !== 'supplier') {
+            logger.warn('Register failed: role is not match', {
+              receivedRole: role,
+              expected: "['client', 'supplier']",
+            }); 
+
             return res.status(400).json({
                 status: 'error',
                 message: 'Role tidak cocok'
@@ -59,6 +65,11 @@ export const register = async (req: Request, res: Response) => {
             },
         });
     } catch (error: any) {
+        logger.error('Error during user registration', {
+            error: error.message,
+            stack: error.stack,
+        });
+
         return res.status(500).json({
             status: 'error',
             message: 'Terjadi kesalahan pada server',

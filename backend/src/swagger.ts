@@ -22,12 +22,6 @@ const doc = {
 };
 
 const outputFile = './src/swagger-output.json';
-const endpointsFiles = [
-  './src/app.ts',
-  './src/routes/authRoutes.ts',
-  './src/routes/userRoutes.ts',
-  './src/routes/productRoutes.ts',
-  './src/routes/cartRoutes.ts',
-];
+const endpointsFiles = ['./src/app.ts'];
 
 swaggerAutogen({ openapi: '3.0.0' })(outputFile, endpointsFiles, doc);
