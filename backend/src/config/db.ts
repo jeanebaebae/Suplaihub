@@ -2,20 +2,18 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { createClient } from '@supabase/supabase-js';
 
-// Paksa baca file .env yang ada di folder backend
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+dotenv.config();
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE;
 
-// Debug log jika masih gagal
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+if (!SUPABASE_URL || !SUPABASE_KEY) {
   console.log('--- DEBUG ERROR ENV ---');
   console.log('Current Directory:', process.cwd());
   console.log('SUPABASE_URL:', SUPABASE_URL);
-  console.log('SUPABASE_ANON_KEY:', SUPABASE_ANON_KEY);
+  console.log('SUPABASE_ANON_KEY:', SUPABASE_KEY);
   console.log('-----------------------');
-  throw new Error('.env kosong atau variabel Supabase tidak ditemukan');
+  throw new Error('.env empty');
 }
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);

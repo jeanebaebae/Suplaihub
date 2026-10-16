@@ -8,6 +8,7 @@ import {
     deleteProduct,
     findSupplierById
  } from "../models/productModel.js";
+ import { logger } from "../utils/logger.js";
 
 export const getCategories = async (_req: AuthenticatedRequest, res: Response) => {
     try {
@@ -43,6 +44,10 @@ export const addProduct = async (req: AuthenticatedRequest, res: Response) => {
 
         return res.status(201).json({message: 'Produk berhasil ditambahkan.', data: newProduct});
     } catch (error: any) {
+        logger.error('Error in addProduct controller', {
+            error: error.message,
+            stack: error.stack,
+        });
         return res.status(500).json({message: 'Gagal menambah produk.', error: error.message});
     }
 }

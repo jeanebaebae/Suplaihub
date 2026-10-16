@@ -17,7 +17,8 @@ export const findSupplierById = async (userId: string) => {
     const { data, error } = await supabase
         .from('categories')
         .select('*')
-        .single()
+        .eq('user_id', userId)
+        .maybeSingle()
     
     if(error) throw new Error(error.message);
     return data;
@@ -40,10 +41,9 @@ export const createProduct = async (productData: {
 }): Promise<ProductEntity[]> => {
     const { data, error } = await supabase
         .from('products')
-        .select('*, categories(name)')
-        .eq('supplier_id', productData.supplier_id)
-        .order('created_at', { ascending: false });
-    
+        .insert([productData])
+        .select('*')
+
     if(error) throw new Error(error.message);
     return data as ProductEntity[];
 };
@@ -53,7 +53,7 @@ export const getProductBySupplier = async (supplierId: string): Promise <Product
         .from('products')
         .select('*, categories(name)')
         .eq('supplier_id', supplierId)
-        .order('created at', { ascending: false })
+        .order('created_at', { ascending: false })
 
     if (error) throw new Error(error.message);
     return data as ProductEntity[];
