@@ -95,7 +95,7 @@ export const updateItemQuantity = async (itemId: string, cartId: string, quantit
         .eq('id', itemId)
         .eq('cart_id', cartId)
         .select('*')
-        .single();
+        .maybeSingle();
     
     if(error) throw new Error(error.message);
     return data;

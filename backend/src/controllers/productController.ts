@@ -85,13 +85,13 @@ export const getMyProduct = async (req: AuthenticatedRequest, res: Response) => 
 };
 
 export const editProduct = async (req: AuthenticatedRequest, res: Response) => {
-    const { name, description, price, stock, unit, is_active } = req.body
     try {
         const userId = req.user?.userId;
         const { id } = req.params;
         if(typeof id !== 'string') return res.status(400).json({message: 'ID tidak valid'});
         if(!userId) return res.status(401).json({message: 'User tidak teridentifikasi'});
 
+        const { name, description, price, stock, unit, is_active } = req.body
         const supplier = await findSupplierById(userId);
         if(!supplier) return res.status(404).json({message: 'Supplier tidak ditemukan'});
 
