@@ -25,7 +25,10 @@ export const findSupplierById = async (userId: string) => {
 };
 
 export const getAllCategories = async () => {
-  const { data, error } = await supabase.from('categories').select('*');
+  const { data, error } = await supabase
+      .from('categories')
+      .select('*');
+
   if (error) throw new Error(error.message);
   return data;
 };
@@ -48,7 +51,17 @@ export const createProduct = async (productData: {
     return data as ProductEntity[];
 };
 
-export const getProductBySupplier = async (supplierId: string): Promise <ProductEntity[]> => {
+export const getAllProducts = async (): Promise<ProductEntity[]> => {
+    const { data, error } = await supabase
+        .from('products')
+        .select('*, categories(name), suppliers(company_name)')
+        .order('created_at', { ascending: false });
+
+        if(error) throw new Error(error.message);
+        return data as ProductEntity[];
+}
+
+export const getProductBySupplier = async (supplierId: string): Promise<ProductEntity[]> => {
     const { data, error } = await supabase
         .from('products')
         .select('*, categories(name)')

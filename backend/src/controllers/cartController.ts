@@ -16,7 +16,7 @@ import {
             status: 'error', message: 'User tidak teridentifikasi.'
         });
 
-        const cartData = getCartByUser(userId);
+        const cartData = await getCartByUser(userId);
         return res.status(200).json({ 
             status: 'success', data: cartData
         });

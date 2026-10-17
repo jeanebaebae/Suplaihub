@@ -6,7 +6,8 @@ import {
     getProductBySupplier,
     updateProduct,
     deleteProduct,
-    findSupplierById
+    findSupplierById,
+    getAllProducts
  } from "../models/productModel.js";
  import { logger } from "../utils/logger.js";
 
@@ -51,6 +52,22 @@ export const addProduct = async (req: AuthenticatedRequest, res: Response) => {
         return res.status(500).json({message: 'Gagal menambah produk.', error: error.message});
     }
 }
+
+export const getProducts = async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const products = await getAllProducts();
+        return res.status(200).json({
+            status: 'success',
+            data: products,
+        });
+    } catch(error: any) {
+        logger.error('Error fetching all products', { error: error.message });
+        return res.status(500).json({
+            status: 'error',
+            message: 'Failed to retrieve product data',
+        });
+    }
+};
 
 export const getMyProduct = async (req: AuthenticatedRequest, res: Response) => {
     try {

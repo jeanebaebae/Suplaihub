@@ -5,12 +5,14 @@ import {
     getMyProduct,
     editProduct,
     removeProduct,
+    getProducts,
  } from "../controllers/productController.js";
 import { authenticateToken, requireRole } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
-// untuk client & supplier
+// untuk publik (client & supplier)
+router.get('/', getProducts);
 router.get('/categories', getCategories);
 
 // untuk supplier saja (protected)
