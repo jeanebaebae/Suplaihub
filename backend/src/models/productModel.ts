@@ -81,9 +81,9 @@ export const updateProduct = async (
         .from('products')
         .update(updateData)
         .eq('id', productId)
-        .eq('supplier_id', supplierId)
+        // .eq('supplier_id', supplierId)
         .select('*')
-        .single();
+        .maybeSingle();
 
     if(error) throw new Error(error.message);
     return data;  

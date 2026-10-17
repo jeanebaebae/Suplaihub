@@ -9,7 +9,7 @@ import {
     findSupplierById,
     getAllProducts
  } from "../models/productModel.js";
- import { logger } from "../utils/logger.js";
+import { logger } from "../utils/logger.js";
 
 export const getCategories = async (_req: AuthenticatedRequest, res: Response) => {
     try {
@@ -85,6 +85,7 @@ export const getMyProduct = async (req: AuthenticatedRequest, res: Response) => 
 };
 
 export const editProduct = async (req: AuthenticatedRequest, res: Response) => {
+    const { name, description, price, stock, unit, is_active } = req.body
     try {
         const userId = req.user?.userId;
         const { id } = req.params;
@@ -95,9 +96,24 @@ export const editProduct = async (req: AuthenticatedRequest, res: Response) => {
         if(!supplier) return res.status(404).json({message: 'Supplier tidak ditemukan'});
 
         const updated = await updateProduct(id, supplier.id, req.body);
+        if(!updated) {
+            logger.warn('Edit product skipped: Product not found or unauthorized', { 
+                id, 
+                supplierId: supplier.id 
+            });
+            
+            return res.status(404).json({ 
+                status: 'error',
+                message: 'Product not found or unauthorized',
+            });
+        }
         return res.status(200).json({message: 'Produk berhasil diperbarui', data: updated});
         
     } catch (error: any) {
+        logger.error('Error in editProduct controller', {
+            error: error.message,
+            stack: error.stack,
+        });
         return res.status(500).json({message: 'Gagal mengedit produk', error: error.message});
     }
 };

@@ -8,7 +8,7 @@ const doc = {
     description: 'Dokumentasi API Suplaihub B2B Platform',
     version: '1.0.0',
   },
-  host: 'localhost:3000', // Sesuaikan dengan port server kamu
+  host: 'localhost:3000',
   schemes: ['http'],
   securityDefinitions: {
     bearerAuth: {

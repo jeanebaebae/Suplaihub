@@ -19,7 +19,8 @@ router.get('/categories', getCategories);
 router.use(authenticateToken, requireRole('supplier'));
 router.get('/my-products', getMyProduct);
 router.post('/', addProduct);
-router.put('/:id', editProduct);
+
+router.put('/:id', authenticateToken,editProduct);
 router.delete('/:id', removeProduct);
 
 export default router;
