@@ -15,7 +15,7 @@ export interface ProductEntity {
 
 export const findSupplierById = async (userId: string) => {
     const { data, error } = await supabase
-        .from('categories')
+        .from('suppliers')
         .select('*')
         .eq('user_id', userId)
         .maybeSingle()
