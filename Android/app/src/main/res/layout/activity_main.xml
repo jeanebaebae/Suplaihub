@@ -43,7 +43,7 @@
                 app:tint="@color/maroon_bg" />
         </LinearLayout>
 
-        <!-- Icon Notifikasi (Placeholder) -->
+        <!-- Icon Keranjang (Placeholder) -->
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
@@ -82,7 +82,7 @@
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@android:drawable/ic_menu_sort_by_size"
+            android:src="@drawable/tune_24"
             app:tint="@color/maroon_bg" />
     </LinearLayout>
 
